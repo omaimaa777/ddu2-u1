@@ -29,7 +29,11 @@ function isCityFound (target) {
 
 // Recommended: constants with references to existing HTML-elements
 
-
+const h2 = document.querySelector("h2");
+const h3 = document.querySelector("h3");
+const closestCity = document.getElementById("closest");
+const furthestCity = document.getElementById("furthest");
+const divCities = document.getElementById("cities");
 
 // Recommended: Ask for the city name and then the rest of the code
 
