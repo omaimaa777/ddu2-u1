@@ -1,5 +1,13 @@
 // Recommended: All functions declared here
 
+function createAllCityBoxes (city) {
+    const cityDiv = document.createElement("div");
+    cityDiv.classList.add("cityBox");
+    cityDiv.textContent = city.name;
+    return cityDiv;
+}
+
+
 function isCityFound (target) {
     let cityFound = false;
     let chosenCity = null;
@@ -41,3 +49,9 @@ const target = prompt("Vilken stad?");
 console.log (target);
 
 isCityFound(target);
+
+let divCitiesElem = document.getElementById("cities");
+
+for (let city of cities) {
+    divCitiesElem.append(createAllCityBoxes(city));
+};
