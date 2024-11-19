@@ -37,4 +37,7 @@ const divCities = document.getElementById("cities");
 
 // Recommended: Ask for the city name and then the rest of the code
 
+const target = prompt("Vilken stad?");
+console.log (target);
 
+isCityFound(target);
