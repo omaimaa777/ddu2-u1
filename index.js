@@ -8,32 +8,51 @@ function createAllCityBoxes (city) {
 }
 
 
+function markCityBox (cityObject, kindOfCity) {
+    const cityBoxes = document.querySelectorAll(".cityBox");
+    for (let cityBox of cityBoxes) {
+        if (cityBox.textContent = cityObject.name) {
+            cityBox.classList.add("target");
+        } else if (cityBox > 1) {
+            cityBox.classList.add("closest");
+        } else {
+            cityBox.classList.add("furthest");
+        }
+    }
+}
+
 function isCityFound (target) {
     let cityFound = false;
     let chosenCity = null;
     const targetLC = target.toLowerCase ();
-
+// sätter "chosenCity" till True/False om "target" matchar något namn i "cities"
     for (let cityValue of cities) {
         const cityValueLC = cityValue.name.toLowerCase ()
-        console.log("Innan if funktionen.");
-
+        titleElem = document.querySelector("title");
         if (targetLC == cityValueLC) {
-            console.log("Inuti if-satsen")
-            //Jämför target med indexerad (chosenCity) array i Cities
+            //jämför target med indexderad (chosenCity) array i Cities
             cityFound = true;
-            h2.textContent = target;
+            h2, textContent = target + "(" + cityValue.country + ")";
             chosenCity = cityValue;
-            console.log(cityFound);
+            //sätt rätt title (fliken)
+            titleElem.innerText = cityValue.name;
+            //avbryt loopen, chosenCity=True, staden finns i databasen
             break;
         } else {
-            console.log("Denna stad finns ej");
-            console.log(cityFound);
+            h2.textContent = target + "finns inte i databasen"
+            //sätt rätt title (fliken)
+            titleElem.innerText = "Not Found"
         }
-        console.log("Chosen city = '" + chosenCity + "'" );
-        console.log("______")
-
+        console.log("___")
     }
+    return cityFound;
 };
+
+
+
+
+
+
 
 // Recommended: constants with references to existing HTML-elements
 
