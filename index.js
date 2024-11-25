@@ -7,10 +7,9 @@ function findCityByName (name) {
 }
 
 
+//funktion för att hitta en stad baserat på dess ID
 
-
-
-
+//funktion for att hitta avstånd mellan två städer
 
 
 
@@ -23,13 +22,14 @@ const h3 = document.querySelector ("h3");
 
 // Recommended: Ask for the city name and then the rest of the code
 
-const target = prompt("Vilken stad?");
-console.log (target);
+//fråga användaren om en stad
 
-isCityFound(target);
+//hitta närmaste och längst bort städer
 
-let divCitiesElem = document.getElementById("cities");
+// visa information om städer
 
-for (let city of cities) {
-    divCitiesElem.append(createAllCityBoxes(city));
-};
+//bygga tabellen
+
+//lägga till kolumnrubriker
+
+// lägg till en stad för varje rad
