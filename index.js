@@ -11,6 +11,13 @@ function getCityByName (cityName) {
 }
 
 //funktion för att hitta en stad baserat på dess ID
+function getCityById (cityId) {
+    for (let city of cities) {
+        if (city.id === cityId) {
+            return city; // returnera staden om ID matchar
+        }
+    }
+}
 
 
 //funktion for att hitta avstånd mellan två städer
