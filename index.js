@@ -1,10 +1,9 @@
 // Recommended: All functions declared here
 
-function createAllCityBoxes (city) {
-    const cityDiv = document.createElement("div");
-    cityDiv.classList.add("cityBox");
-    cityDiv.textContent = city.name;
-    return cityDiv;
+
+//funktion för att hitta en stad baserat på dess namn
+function findCityByName (name) {
+    return cities.find(city => city.name === name) || null;
 }
 
 
