@@ -1,16 +1,19 @@
 // Recommended: All functions declared here
 
-
 //funktion för att hitta en stad baserat på dess namn
-function findCityByName (name) {
-    return cities.find(city => city.name === name) || null;
+function getCityByName (cityName) {
+    for (let city of cities) {
+        if (cityName === city.name) {
+            return city; //returnera staden om namnet matchar
+        }
+    }
+    return null; // returnera null om staden inte hittas
 }
-
 
 //funktion för att hitta en stad baserat på dess ID
 
-//funktion for att hitta avstånd mellan två städer
 
+//funktion for att hitta avstånd mellan två städer
 
 
 // Recommended: constants with references to existing HTML-elements
