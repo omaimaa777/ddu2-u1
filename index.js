@@ -13,28 +13,30 @@ function createAllCityBoxes () {
 }
 
 
-//funktion för att hitta en stad baserat på dess namn
-function getCityByName (cityName) {
+//funktion för att markera och hitta targetCityName
+function findCity (targetCityName) {
     for (let city of cities) {
-        if (cityName === city.name) {
-            return city; //returnera staden om namnet matchar
+        if (city.name === targetCityName) {
+            return city;
         }
     }
-    return null; // returnera null om staden inte hittas
+    return null;
 }
 
-//funktion för att hitta en stad baserat på dess ID
-function getCityById (cityId) {
-    for (let city of cities) {
-        if (city.id === cityId) {
-            return city; // returnera staden om ID matchar
+function markCityBox (kindOfCity, cityObject, distance = null) {
+    const cityElements = document.querySelectorAll (".cityBox")
+    for (let cityElement of cityElements) {
+        if (cityElement.textContent === cityObjects.name) {
+            cityElement.classList.add(kindOfCity);
+            if (kindOfCity == "closest" && distance !== null){
+                cityElement.innerHTML += ` ligger ${distance} mil bort`;
+        }    
+        if (kindOfCity == "furthest" && distance !== null){
+            cityElement.innerHTML += ` ligger ${distance} mil bort`;
+        }
         }
     }
 }
-
-//funktion for att hitta avstånd mellan två städer
-
-function getDistancesBetweenCities (cityA)
 
 
 // Recommended: constants with references to existing HTML-elements
