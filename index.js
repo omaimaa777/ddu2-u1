@@ -38,6 +38,22 @@ function markCityBox (kindOfCity, cityObject, distance = null) {
     }
 }
 
+function getClosestCity (targetCity) {
+    let getClosestCity = null;
+    let minDistance = Infinity;
+
+    for (let counter of distances) {
+        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
+            const otherCityId = cities.find(city => city.id === otherCityId);
+
+            if (counter.distance < minDistance) {
+                minDistance = counter.distance;
+                closestCity = otherCity;
+            }
+        }
+    }
+    return {city: closestCity, distance: minDistance};
+}
 
 // Recommended: constants with references to existing HTML-elements
 
