@@ -55,6 +55,26 @@ function getClosestCity (targetCity) {
     return {city: closestCity, distance: minDistance};
 }
 
+function getFurthestCity (targetCity) {
+    let furthestCity = null;
+    let maxDistance = Infinity;
+
+    for (let counter of distances) {
+        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
+            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;¨
+            const otherCity = cities.find(city => city.id === otherCityId);
+            
+            if (counter.distance > maxDistance) {
+                maxDistance = counter.distance;
+                furthestCity = otherCity;
+            }
+        }
+    }
+
+    return {city: furthestCity, distance: maxDistance};
+}
+
+
 // Recommended: constants with references to existing HTML-elements
 
 const cititesDiv = document.getElementById ("cities");
