@@ -61,7 +61,7 @@ function getFurthestCity (targetCity) {
 
     for (let counter of distances) {
         if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
-            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;¨
+            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
             const otherCity = cities.find(city => city.id === otherCityId);
             
             if (counter.distance > maxDistance) {
@@ -74,6 +74,22 @@ function getFurthestCity (targetCity) {
     return {city: furthestCity, distance: maxDistance};
 }
 
+if (cityFound == null) {
+    document.title = "Not found";
+    h2.textContent = `${targetCityName} finns inte i databasen!`;
+    h3.textContent = "";
+} else {
+    document.title = `${cityFound.name}`;
+    h2.textContent = `${cityFound.name} ${cityFound.country} )`;
+    markCityBox ("target", cityFound);
+    const {city: closestCity, distance: minDistance} = getClosestCity(cityFound);
+    markCityBox ("closest", closestCity, minDistance /10);
+    const {city: furthestCity, distance: maxDistance} = getFurthestCity(cityFound);
+
+    markCityBox ("furthest", furthestCity, maxDistance /10);
+
+    h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;
+}
 
 // Recommended: constants with references to existing HTML-elements
 
