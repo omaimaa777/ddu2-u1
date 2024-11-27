@@ -1,56 +1,58 @@
-const cititesDiv = document.getElementById ("cities");
-const tableDiv = document.getElementById("table");
-const cityElement = document.createElement ("p");
-const h2 = document.querySelector ("h2");
-const h3 = document.querySelector ("h3");
 const targetCityName = prompt ("Vilken stad?");
-const cityFound = searchCity (targetCityName);
+const h2 = document.querySelector("h2");
+const h3 = document.querySelector("h3");
+const citiesDiv = document.getElementById("cities");
+const cityElement = document.createElement("p");
+const tablediv = document.getElementById("table");
+const cityFound = findCity (targetCityName);
 
 createTable()
 createAllCityBoxes();
 
-function createAllCityBoxes () {
-    cititesDiv.innerHtml = "";
+function createAllCityBoxes() {
+    citiesDiv.innerHTML = "";
     for (let city of cities) { 
-        const cityElement = document.createElement ("p");
-        cityElement.textContent = city.name;
-        cityElement.classList.add("cityBox");
-        cititesDiv.appendChild(cityElement);
-    }
+        const cityElement = document.createElement("p");
+        cityElement.textContent = city.name; 
+        cityElement.classList.add("cityBox"); 
+        citiesDiv.appendChild(cityElement); 
+    
+    } 
 }
 
-function searchCity (targetCityName) {
+function findCity (targetCityName) { 
     for (let city of cities) {
         if (city.name === targetCityName) {
-            return city;
+            return city; 
         }
     }
-    return null;
+    return null; 
 }
 
-function markCityBox (kindOfCity, cityObject, distance = null) {
-    const cityElements = document.querySelectorAll (".cityBox")
-    for (let cityElement of cityElements) {
-        if (cityElement.textContent === cityObjects.name) {
-            cityElement.classList.add(kindOfCity);
+function markCityBox(kindOfCity, cityObject, distance = null) {
+    const cityElements = document.querySelectorAll(".cityBox")
+    for (let cityElement of cityElements) { 
+       if (cityElement.textContent === cityObject.name) {
+        cityElement.classList.add(kindOfCity);
 
         if (kindOfCity == "closest" && distance !== null){
-                cityElement.innerHTML += ` ligger ${distance} mil bort`;
-        }    
+            cityElement.innerHTML += ` ligger ${distance} mil bort`;
+        }
         if (kindOfCity == "furthest" && distance !== null){
             cityElement.innerHTML += ` ligger ${distance} mil bort`;
         }
-        }
-    }
+     }
+  }
 }
 
-function getClosestCity (targetCity) {
-    let ClosestCity = null;
+function getClosestCity(targetCity) {
+    let closestCity = null;
     let minDistance = Infinity;
 
     for (let counter of distances) {
         if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
-            const otherCityId = cities.find(city => city.id === otherCityId);
+            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
+            const otherCity = cities.find(city => city.id === otherCityId);
 
             if (counter.distance < minDistance) {
                 minDistance = counter.distance;
@@ -61,29 +63,9 @@ function getClosestCity (targetCity) {
     return {city: closestCity, distance: minDistance};
 }
 
-function getFurthestCity (targetCity) {
-    let furthestCity = null;
-    let maxDistance = Infinity;
-
-    for (let counter of distances) {
-        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
-            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
-            const otherCity = cities.find(city => city.id === otherCityId);
-            
-            if (counter.distance < minDistance) {
-                minDistance = counter.distance;
-                closestCityCity = otherCity;
-            }
-        }
-    }
-
-    return {city: closestCity, distance: minDistance};
-}
-
-
 function getFurthestCity(targetCity) {
     let furthestCity = null;
-    let maxDistance = Infinity;
+    let maxDistance = -Infinity;
 
     for (let counter of distances) {
         if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
@@ -112,61 +94,60 @@ function findDistance(city1Id, city2Id) {
 }
 
 if (cityFound == null) {
-    document.title = "Not found";
-    h2.textContent = `${targetCityName} finns inte i databasen!`;
-    h3.textContent = "";
+    h2.textContent = `${targetCityName} Finns inte i databasen!`
+    document.title = "Not found"; 
+    h3.textContent= "";
 } else {
-    document.title = `${cityFound.name}`;
-    h2.textContent = `${cityFound.name} ${cityFound.country} )`;
-    markCityBox ("target", cityFound);
+    h2.textContent = `${cityFound.name} (${cityFound.country})`;
+    document.title = `${cityFound.name}`; 
+    markCityBox("target", cityFound);
     const {city: closestCity, distance: minDistance} = getClosestCity(cityFound);
-    markCityBox ("closest", closestCity, minDistance /10);
-    const {city: furthestCity, distance: maxDistance} = getFurthestCity(cityFound);
+    markCityBox("closest", closestCity, minDistance /10);
+    const {city: farthestCity, distance: maxDistance} = getFurthestCity(cityFound);
+    markCityBox("furthest", farthestCity, maxDistance /10); 
 
-    markCityBox ("furthest", furthestCity, maxDistance /10);
-
-    h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;
+    h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;        
 }
 
-function createTable(){
-    const emptyCell = document.createElement("p");
-    emptyCell.classList.add("cell");
-    tablediv.appendChild(emptyCell);
-    
-    for (let city of cities){
-        const idCell = document.createElement ("p");
-        idCell.classList.add("cell", "head_row");
-        idCell.textContent = city.id;
-        tablediv.appendChild(idCell);
-        
-    }
-    
-    for (let cityRow of cities){
-        let classEvenrows = "";
-        if (cityRow.id % 2 == 0) {
-         classEvenrows= "even_row";
-        }
-    
-     const cityCell = document.createElement("p");
-     cityCell.classList.add("cell", "head_column");
-     cityCell.textContent = ` ${cityRow.id}-${cityRow.name}`;
-     cityCell.classList.add("even_row");
-     tablediv.appendChild(cityCell);
-    
-     for (let cityColumn of cities) {
-        let classEvenCols = cityColumn.id % 2 == 0 ? "even_col" : "";
-        let cellClass = `cell ${classEvenrows} ${classEvenCols}`;
-    
-        if (cityRow.id === cityColumn.id) {
-            tablediv.innerHTML += `<p class="${cellClass}"></p>`;
-        } else {
-            const distance = findDistance(cityRow.id, cityColumn.id);
-            const cellContent = distance ? (distance / 10) : "";
-            tablediv.innerHTML += `<p class="${cellClass}">${cellContent}</p>`;
-        }
-       }
-      }   
-     }
 
+function createTable(){
+const emptyCell = document.createElement("p");
+emptyCell.classList.add("cell");
+tablediv.appendChild(emptyCell);
+
+for (let city of cities){
+    const idCell = document.createElement ("p");
+    idCell.classList.add("cell", "head_row");
+    idCell.textContent = city.id;
+    tablediv.appendChild(idCell);
+    
+}
+
+for (let cityRow of cities){
+    let classEvenrows = "";
+    if (cityRow.id % 2 == 0) {
+     classEvenrows= "even_row";
+    }
+
+ const cityCell = document.createElement("p");
+ cityCell.classList.add("cell", "head_column");
+ cityCell.textContent = ` ${cityRow.id}-${cityRow.name}`;
+ cityCell.classList.add("even_row");
+ tablediv.appendChild(cityCell);
+
+ for (let cityColumn of cities) {
+    let classEvenCols = cityColumn.id % 2 == 0 ? "even_col" : "";
+    let cellClass = `cell ${classEvenrows} ${classEvenCols}`;
+
+    if (cityRow.id === cityColumn.id) {
+        tablediv.innerHTML += `<p class="${cellClass}"></p>`;
+    } else {
+        const distance = findDistance(cityRow.id, cityColumn.id);
+        const cellContent = distance ? (distance / 10) : "";
+        tablediv.innerHTML += `<p class="${cellClass}">${cellContent}</p>`;
+    }
+   }
+  }   
+ }
 
 
