@@ -9,7 +9,6 @@ const cityFound = searchCity (targetCityName);
 createTable()
 createAllCityBoxes();
 
-//funktion för att vid anrop skapa city boxes
 function createAllCityBoxes () {
     cititesDiv.innerHtml = "";
     for (let city of cities) { 
@@ -20,9 +19,7 @@ function createAllCityBoxes () {
     }
 }
 
-
-//funktion för att markera och hitta targetCityName
-function findCity (targetCityName) {
+function searchCity (targetCityName) {
     for (let city of cities) {
         if (city.name === targetCityName) {
             return city;
@@ -102,6 +99,18 @@ function getFurthestCity(targetCity) {
     return {city: furthestCity, distance: maxDistance};
 }
 
+function findDistance(city1Id, city2Id) {
+    for (let d of distances) {
+        if (
+            (d.city1 === city1Id && d.city2 === city2Id) ||
+            (d.city1 === city2Id && d.city2 === city1Id)
+        ) {
+            return d.distance; 
+        }
+    }
+    return null;
+}
+
 if (cityFound == null) {
     document.title = "Not found";
     h2.textContent = `${targetCityName} finns inte i databasen!`;
@@ -119,9 +128,45 @@ if (cityFound == null) {
     h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;
 }
 
-
-//skapa tabell
-
+function createTable(){
+    const emptyCell = document.createElement("p");
+    emptyCell.classList.add("cell");
+    tablediv.appendChild(emptyCell);
+    
+    for (let city of cities){
+        const idCell = document.createElement ("p");
+        idCell.classList.add("cell", "head_row");
+        idCell.textContent = city.id;
+        tablediv.appendChild(idCell);
+        
+    }
+    
+    for (let cityRow of cities){
+        let classEvenrows = "";
+        if (cityRow.id % 2 == 0) {
+         classEvenrows= "even_row";
+        }
+    
+     const cityCell = document.createElement("p");
+     cityCell.classList.add("cell", "head_column");
+     cityCell.textContent = ` ${cityRow.id}-${cityRow.name}`;
+     cityCell.classList.add("even_row");
+     tablediv.appendChild(cityCell);
+    
+     for (let cityColumn of cities) {
+        let classEvenCols = cityColumn.id % 2 == 0 ? "even_col" : "";
+        let cellClass = `cell ${classEvenrows} ${classEvenCols}`;
+    
+        if (cityRow.id === cityColumn.id) {
+            tablediv.innerHTML += `<p class="${cellClass}"></p>`;
+        } else {
+            const distance = findDistance(cityRow.id, cityColumn.id);
+            const cellContent = distance ? (distance / 10) : "";
+            tablediv.innerHTML += `<p class="${cellClass}">${cellContent}</p>`;
+        }
+       }
+      }   
+     }
 
 
 
