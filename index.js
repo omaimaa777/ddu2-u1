@@ -92,64 +92,18 @@ if (cityFound == null) {
 
 
 //skapa tabell
-for (let row = 0; row <= cities.length; row++) {
-    for (let column = 0; column <= cities.length; column++) {
-        let gridCell = document.createElement("div"); 
-        gridCell.classList.add("cell"); 
-        distanceTable.appendChild(gridCell); 
-
-        if (row >= 1 && column >= 1) {
-            for (let distanceKey in distances) {
-                if (distances[distanceKey].city1 == column - 1 && distances[distanceKey].city2 == row - 1) {
-                    gridCell.textContent = distances[distanceKey].distance / 10; 
-                }
-                if (distances[distanceKey].city2 == column - 1 && distances[distanceKey].city1 == row - 1) {
-                    gridCell.textContent = distances[distanceKey].distance / 10; 
-                }
-            }
-        }
-        if (row == 0) {
-            gridCell.classList.add("head_row"); 
-            gridCell.textContent = column - 1; 
-        }
-
-        if (column == 0 && row >= 1) {
-            gridCell.classList.add("head_column"); 
-            gridCell.textContent = cities[row - 1].id + " - " + cities[row - 1].name;
-        }
-
-        if (row == column) {
-            gridCell.textContent = " ";
-        }
-
-        if (row % 2 == 1) {
-            gridCell.classList.add("even_row"); 
-        }
-
-        if (column % 2 == 1 && row != 0) {
-            gridCell.classList.add("even_col"); 
-        }
-    }
-}
-
 
 
 // Recommended: constants with references to existing HTML-elements
 
-let enterCity = prompt("Vilken stad?");
-let cityWasfound = false;
-let closestCityFound = null;
-let furthestCityFound = null;
-let minDistance = 3000;
-let maxDistance = 0;
+const cititesDiv = document.getElementById ("cities");
+const tableDiv = document.getElementById("table");
+const cityElement = document.createElement ("p");
+const h2 = document.querySelector ("h2");
+const h3 = document.querySelector ("h3");
 
-const titleHead = document.querySelector("title");
-const cityTitle = document.querySelector("h2");
-const cityUndertitle = document.querySelector("h3");
-const cityBoxes = document.querySelector("#cities");
-const distanceTable = document.querySelector("#table");
-const theClosestCity = document.querySelector("#closest");
-const theFurthestCity = document.querySelector("#furthest");
+const targetCityName = prompt ("Vilken stad?");
+const cityFound = searchCity (targetCityName);
 
 // Recommended: Ask for the city name and then the rest of the code
 
