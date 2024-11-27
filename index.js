@@ -82,12 +82,12 @@ function getFurthestCity(targetCity) {
 }
 
 function findDistance(city1Id, city2Id) {
-    for (let d of distances) {
+    for (let distance of distances) {
         if (
-            (d.city1 === city1Id && d.city2 === city2Id) ||
-            (d.city1 === city2Id && d.city2 === city1Id)
+            (distance.city1 === city1Id && distance.city2 === city2Id) ||
+            (distance.city1 === city2Id && distance.city2 === city1Id)
         ) {
-            return d.distance; 
+            return distance.distance; 
         }
     }
     return null;
