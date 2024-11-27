@@ -1,6 +1,5 @@
 // Recommended: All functions declared here
 
-
 //funktion för att vid anrop skapa city boxes
 function createAllCityBoxes () {
     cititesDiv.innerHtml = "";
@@ -91,27 +90,26 @@ if (cityFound == null) {
     h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;
 }
 
+
+//skapa tabell
+
+
 // Recommended: constants with references to existing HTML-elements
 
-const cititesDiv = document.getElementById ("cities");
-const tableDiv = document.getElementById("table");
-const cityElement = document.createElement ("p");
-const h2 = document.querySelector ("h2");
-const h3 = document.querySelector ("h3");
+let enterCity = prompt("Vilken stad?");
+let cityWasfound = false;
+let closestCityFound = null;
+let furthestCityFound = null;
+let minDistance = 3000;
+let maxDistance = 0;
 
-const targetCityName = prompt ("Ange en stad i Europa!");
-const cityFound = searchCity (targetCityName);
+const titleHead = document.querySelector("title");
+const cityTitle = document.querySelector("h2");
+const cityUndertitle = document.querySelector("h3");
+const cityBoxes = document.querySelector("#cities");
+const distanceTable = document.querySelector("#table");
+const theClosestCity = document.querySelector("#closest");
+const theFurthestCity = document.querySelector("#furthest");
 
 // Recommended: Ask for the city name and then the rest of the code
 
-//fråga användaren om en stad
-
-//hitta närmaste och längst bort städer
-
-// visa information om städer
-
-//bygga tabellen
-
-//lägga till kolumnrubriker
-
-// lägg till en stad för varje rad
