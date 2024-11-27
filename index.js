@@ -1,4 +1,13 @@
-// Recommended: All functions declared here
+const cititesDiv = document.getElementById ("cities");
+const tableDiv = document.getElementById("table");
+const cityElement = document.createElement ("p");
+const h2 = document.querySelector ("h2");
+const h3 = document.querySelector ("h3");
+const targetCityName = prompt ("Vilken stad?");
+const cityFound = searchCity (targetCityName);
+
+createTable()
+createAllCityBoxes();
 
 //funktion för att vid anrop skapa city boxes
 function createAllCityBoxes () {
@@ -27,7 +36,8 @@ function markCityBox (kindOfCity, cityObject, distance = null) {
     for (let cityElement of cityElements) {
         if (cityElement.textContent === cityObjects.name) {
             cityElement.classList.add(kindOfCity);
-            if (kindOfCity == "closest" && distance !== null){
+
+        if (kindOfCity == "closest" && distance !== null){
                 cityElement.innerHTML += ` ligger ${distance} mil bort`;
         }    
         if (kindOfCity == "furthest" && distance !== null){
@@ -38,7 +48,7 @@ function markCityBox (kindOfCity, cityObject, distance = null) {
 }
 
 function getClosestCity (targetCity) {
-    let getClosestCity = null;
+    let ClosestCity = null;
     let minDistance = Infinity;
 
     for (let counter of distances) {
@@ -63,13 +73,32 @@ function getFurthestCity (targetCity) {
             const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
             const otherCity = cities.find(city => city.id === otherCityId);
             
+            if (counter.distance < minDistance) {
+                minDistance = counter.distance;
+                closestCityCity = otherCity;
+            }
+        }
+    }
+
+    return {city: closestCity, distance: minDistance};
+}
+
+
+function getFurthestCity(targetCity) {
+    let furthestCity = null;
+    let maxDistance = Infinity;
+
+    for (let counter of distances) {
+        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
+            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
+            const otherCity = cities.find(city => city.id === otherCityId);
+
             if (counter.distance > maxDistance) {
                 maxDistance = counter.distance;
                 furthestCity = otherCity;
             }
         }
     }
-
     return {city: furthestCity, distance: maxDistance};
 }
 
@@ -94,16 +123,5 @@ if (cityFound == null) {
 //skapa tabell
 
 
-// Recommended: constants with references to existing HTML-elements
 
-const cititesDiv = document.getElementById ("cities");
-const tableDiv = document.getElementById("table");
-const cityElement = document.createElement ("p");
-const h2 = document.querySelector ("h2");
-const h3 = document.querySelector ("h3");
-
-const targetCityName = prompt ("Vilken stad?");
-const cityFound = searchCity (targetCityName);
-
-// Recommended: Ask for the city name and then the rest of the code
 
