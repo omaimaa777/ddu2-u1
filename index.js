@@ -1,153 +1,158 @@
-const targetCityName = prompt ("Vilken stad?");
+// variables
+const targetCityName = prompt("Vilken stad?");
 const h2 = document.querySelector("h2");
 const h3 = document.querySelector("h3");
 const citiesDiv = document.getElementById("cities");
-const cityElement = document.createElement("p");
 const tablediv = document.getElementById("table");
-const cityFound = findCity (targetCityName);
 
-createTable()
-createAllCityBoxes();
-
+// Function to create city boxes
 function createAllCityBoxes() {
-    citiesDiv.innerHTML = "";
-    for (let city of cities) { 
-        const cityElement = document.createElement("p");
-        cityElement.textContent = city.name; 
-        cityElement.classList.add("cityBox"); 
-        citiesDiv.appendChild(cityElement); 
-    
-    } 
-}
+    // Clear existing content
+    citiesDiv.textContent = '';
 
-function findCity (targetCityName) { 
     for (let city of cities) {
-        if (city.name === targetCityName) {
-            return city; 
-        }
+        const p = document.createElement('p');
+        p.className = 'cityBox';
+        p.textContent = city.name;
+        citiesDiv.appendChild(p);
     }
-    return null; 
 }
 
-function markCityBox(kindOfCity, cityObject, distance = null) {
-    const cityElements = document.querySelectorAll(".cityBox")
-    for (let cityElement of cityElements) { 
-       if (cityElement.textContent === cityObject.name) {
-        cityElement.classList.add(kindOfCity);
-
-        if (kindOfCity == "closest" && distance !== null){
-            cityElement.innerHTML += ` ligger ${distance} mil bort`;
-        }
-        if (kindOfCity == "furthest" && distance !== null){
-            cityElement.innerHTML += ` ligger ${distance} mil bort`;
-        }
-     }
-  }
-}
-
-function getClosestCity(targetCity) {
-    let closestCity = null;
-    let minDistance = Infinity;
-
-    for (let counter of distances) {
-        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
-            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
-            const otherCity = cities.find(city => city.id === otherCityId);
-
-            if (counter.distance < minDistance) {
-                minDistance = counter.distance;
-                closestCity = otherCity;
+// Function to mark cities and add distance
+function markCityBox(kindOfCity, cityObject, distance) {
+    const boxes = document.querySelectorAll('.cityBox');
+    for (let box of boxes) {
+        if (box.textContent === cityObject.name) {
+            box.classList.add(kindOfCity);
+            if (distance) {
+                box.textContent = cityObject.name + " ligger " + distance + " mil bort";
             }
         }
     }
-    return {city: closestCity, distance: minDistance};
 }
 
-function getFurthestCity(targetCity) {
+// Function to create table
+function createTable() {
+    tablediv.textContent = ''; // Clear existing content
+
+    // Create header cell
+    const headerCell = document.createElement('p');
+    headerCell.className = 'cell';
+    tablediv.appendChild(headerCell);
+
+    // Create header row
+    for (let city of cities) {
+        const header = document.createElement('p');
+        header.className = 'cell head_row';
+        header.textContent = city.id;
+        tablediv.appendChild(header);
+    }
+
+    // Create table content
+    for (let cityRow of cities) {
+        // Create row header
+        const rowHeader = document.createElement('p');
+        rowHeader.className = 'cell head_column';
+        if (cityRow.id % 2 === 0) {
+            rowHeader.classList.add('even_row');
+        }
+        rowHeader.textContent = cityRow.id + "-" + cityRow.name;
+        tablediv.appendChild(rowHeader);
+
+        // Create cells
+        for (let cityCol of cities) {
+            const cell = document.createElement('p');
+            let className = 'cell';
+            if (cityRow.id % 2 === 0) {
+                className += ' even_row';
+            }
+            if (cityCol.id % 2 === 0) {
+                className += ' even_col';
+            }
+            cell.className = className;
+
+            if (cityRow.id !== cityCol.id) {
+                let foundDistance = null;
+                for (let dist of distances) {
+                    if ((dist.city1 === cityRow.id && dist.city2 === cityCol.id) ||
+                        (dist.city1 === cityCol.id && dist.city2 === cityRow.id)) {
+                        foundDistance = dist.distance / 10;
+                        break;
+                    }
+                }
+                if (foundDistance !== null) {
+                    cell.textContent = foundDistance;
+                }
+            }
+
+            tablediv.appendChild(cell);
+        }
+    }
+}
+
+// Run functions
+createAllCityBoxes();
+createTable();
+
+// Check if city exists
+let cityFound = null;
+for (let city of cities) {
+    if (city.name === targetCityName) {
+        cityFound = city;
+        break;
+    }
+}
+
+// If city doesn't exist
+if (cityFound === null) {
+    h2.textContent = targetCityName + " Finns inte i databasen!";
+    document.title = "Not found";
+    h3.textContent = "";
+} 
+// If city exists
+else {
+    h2.textContent = cityFound.name + " (" + cityFound.country + ")";
+    document.title = cityFound.name;
+    markCityBox("target", cityFound);
+
+    let closestCity = null;
+    let shortestDistance = Infinity;
     let furthestCity = null;
-    let maxDistance = -Infinity;
+    let longestDistance = -Infinity;
 
-    for (let counter of distances) {
-        if (counter.city1 === targetCity.id || counter.city2 === targetCity.id) {
-            const otherCityId = counter.city1 === targetCity.id ? counter.city2 : counter.city1;
-            const otherCity = cities.find(city => city.id === otherCityId);
+    // Find closest and furthest cities
+    for (let distance of distances) {
+        if (distance.city1 === cityFound.id || distance.city2 === cityFound.id) {
+            let otherCityId;
+            if (distance.city1 === cityFound.id) {
+                otherCityId = distance.city2;
+            } else {
+                otherCityId = distance.city1;
+            }
 
-            if (counter.distance > maxDistance) {
-                maxDistance = counter.distance;
+            let otherCity = null;
+            for (let city of cities) {
+                if (city.id === otherCityId) {
+                    otherCity = city;
+                    break;
+                }
+            }
+
+            if (distance.distance < shortestDistance) {
+                shortestDistance = distance.distance;
+                closestCity = otherCity;
+            }
+
+            if (distance.distance > longestDistance) {
+                longestDistance = distance.distance;
                 furthestCity = otherCity;
             }
         }
     }
-    return {city: furthestCity, distance: maxDistance};
+
+    markCityBox("closest", closestCity, shortestDistance / 10);
+    markCityBox("furthest", furthestCity, longestDistance / 10);
+
+    h3.textContent = "Av städerna i databasen så ligger " + closestCity.name + " närmast och " + furthestCity.name + " längst bort.";
 }
-
-function findDistance(city1Id, city2Id) {
-    for (let distance of distances) {
-        if (
-            (distance.city1 === city1Id && distance.city2 === city2Id) ||
-            (distance.city1 === city2Id && distance.city2 === city1Id)
-        ) {
-            return distance.distance; 
-        }
-    }
-    return null;
-}
-
-if (cityFound == null) {
-    h2.textContent = `${targetCityName} Finns inte i databasen!`
-    document.title = "Not found"; 
-    h3.textContent= "";
-} else {
-    h2.textContent = `${cityFound.name} (${cityFound.country})`;
-    document.title = `${cityFound.name}`; 
-    markCityBox("target", cityFound);
-    const {city: closestCity, distance: minDistance} = getClosestCity(cityFound);
-    markCityBox("closest", closestCity, minDistance /10);
-    const {city: farthestCity, distance: maxDistance} = getFurthestCity(cityFound);
-    markCityBox("furthest", farthestCity, maxDistance /10); 
-
-    h3.textContent = `Av städerna i databasen så ligger ${ closestCity.name } närmast och ${farthestCity.name} längst bort.`;        
-}
-
-
-function createTable(){
-const emptyCell = document.createElement("p");
-emptyCell.classList.add("cell");
-tablediv.appendChild(emptyCell);
-
-for (let city of cities){
-    const idCell = document.createElement ("p");
-    idCell.classList.add("cell", "head_row");
-    idCell.textContent = city.id;
-    tablediv.appendChild(idCell);
-    
-}
-
-for (let cityRow of cities){
-    let classEvenrows = "";
-    if (cityRow.id % 2 == 0) {
-     classEvenrows= "even_row";
-    }
-
- const cityCell = document.createElement("p");
- cityCell.classList.add("cell", "head_column");
- cityCell.textContent = ` ${cityRow.id}-${cityRow.name}`;
- cityCell.classList.add("even_row");
- tablediv.appendChild(cityCell);
-
- for (let cityColumn of cities) {
-    let classEvenCols = cityColumn.id % 2 == 0 ? "even_col" : "";
-    let cellClass = `cell ${classEvenrows} ${classEvenCols}`;
-
-    if (cityRow.id === cityColumn.id) {
-        tablediv.innerHTML += `<p class="${cellClass}"></p>`;
-    } else {
-        const distance = findDistance(cityRow.id, cityColumn.id);
-        const cellContent = distance ? (distance / 10) : "";
-        tablediv.innerHTML += `<p class="${cellClass}">${cellContent}</p>`;
-    }
-   }
-  }   
- }
-
 
