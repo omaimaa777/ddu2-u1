@@ -102,13 +102,13 @@ if (cityFound === null) {
     let furthestCity = null;
     let longestDistance = distances[0].distance;
 
-    for (let distance of distances) {
-        if (distance.city1 === cityFound.id || distance.city2 === cityFound.id) {
+    for (let cityDistance of distances) {
+        if (cityDistance.city1 === cityFound.id || cityDistance.city2 === cityFound.id) {
             let otherCityId;
-            if (distance.city1 === cityFound.id) {
-                otherCityId = distance.city2;
+            if (cityDistance.city1 === cityFound.id) {
+                otherCityId = cityDistance.city2;
             } else {
-                otherCityId = distance.city1;
+                otherCityId = cityDistance.city1;
             }
 
             let otherCity = null;
@@ -119,13 +119,13 @@ if (cityFound === null) {
                 }
             }
 
-            if (distance.distance < shortestDistance) {
-                shortestDistance = distance.distance;
+            if (cityDistance < shortestDistance) {
+                shortestDistance = cityDistance;
                 closestCity = otherCity;
             }
 
-            if (distance.distance > longestDistance) {
-                longestDistance = distance.distance;
+            if (cityDistance > longestDistance) {
+                longestDistance = cityDistance;
                 furthestCity = otherCity;
             }
         }
