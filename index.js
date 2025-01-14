@@ -20,7 +20,7 @@ function markCityBox(kindOfCity, cityObject, distance) {
     for (let box of boxes) {
         if (box.textContent === cityObject.name) {
             box.classList.add(kindOfCity);
-            if (distance) {
+            if (distance !== null && distance !== undefined) {
                 box.textContent = cityObject.name + " ligger " + distance + " mil bort";
             }
         }
