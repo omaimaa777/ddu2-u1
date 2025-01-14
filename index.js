@@ -6,66 +6,64 @@ const tablediv = document.getElementById("table");
 
 function createAllCityBoxes() {
     citiesDiv.textContent = '';
-    for (let i = 0; i < cities.length; i++) {
-        const p = document.createElement("p");
-        p.className = "cityBox";
-        p.textContent = cities[i].name;
+    
+    for (let city of cities) {
+        const p = document.createElement('p');
+        p.className = 'cityBox';
+        p.textContent = city.name;
         citiesDiv.appendChild(p);
     }
 }
 
 function markCityBox(kindOfCity, cityObject, distance) {
-    const boxes = document.querySelectorAll(".cityBox");
-    for (let i = 0; i < boxes.length; i++) {
-        if (boxes[i].textContent === cityObject.name) {
-            boxes[i].classList.add(kindOfCity);
+    const boxes = document.querySelectorAll('.cityBox');
+    for (let box of boxes) {
+        if (box.textContent === cityObject.name) {
+            box.classList.add(kindOfCity);
             if (distance) {
-                boxes[i].textContent = cityObject.name + " ligger " + distance + " mil bort";
+                box.textContent = cityObject.name + " ligger " + distance + " mil bort";
             }
         }
     }
 }
 
 function createTable() {
-    tablediv.textContent = '';
-    const headerCell = document.createElement("p");
-    headerCell.className = "cell";
+    tablediv.textContent = ''; 
+
+    const headerCell = document.createElement('p');
+    headerCell.className = 'cell';
     tablediv.appendChild(headerCell);
 
-    for (let i = 0; i < cities.length; i++) {
-        const header = document.createElement("p");
-        header.className = "cell head_row";
-        header.textContent = cities[i].id;
+    for (let city of cities) {
+        const header = document.createElement('p');
+        header.className = 'cell head_row';
+        header.textContent = city.id;
         tablediv.appendChild(header);
     }
 
-    for (let i = 0; i < cities.length; i++) {
-        const rowHeader = document.createElement("p");
-        if (cities[i].id % 2 === 0) {
-            rowHeader.className = "cell head_column even_row";
+    for (let cityRow of cities) {
+        const rowHeader = document.createElement('p');
+        if (cityRow.id % 2 === 0) {
+            rowHeader.className = 'cell head_column even_row';
         } else {
-            rowHeader.className = "cell head_column";
+            rowHeader.className = 'cell head_column';
         }
-        rowHeader.textContent = cities[i].id + "-" + cities[i].name;
+        rowHeader.textContent = cityRow.id + "-" + cityRow.name;
         tablediv.appendChild(rowHeader);
 
-        for (let j = 0; j < cities.length; j++) {
-            const cell = document.createElement("p");
-            let className = "cell";
-            if (cities[i].id % 2 === 0) {
-                className += " even_row";
-            }
-            if (cities[j].id % 2 === 0) {
-                className += " even_col";
-            }
+        for (let cityCol of cities) {
+            const cell = document.createElement('p');
+            let className = 'cell';
+            if (cityRow.id % 2 === 0) className += ' even_row';
+            if (cityCol.id % 2 === 0) className += ' even_col';
             cell.className = className;
 
-            if (i !== j) {
+            if (cityRow.id !== cityCol.id) {
                 let foundDistance = null;
-                for (let k = 0; k < distances.length; k++) {
-                    if ((distances[k].city1 === cities[i].id && distances[k].city2 === cities[j].id) ||
-                        (distances[k].city1 === cities[j].id && distances[k].city2 === cities[i].id)) {
-                        foundDistance = distances[k].distance / 10;
+                for (let dist of distances) {
+                    if ((dist.city1 === cityRow.id && dist.city2 === cityCol.id) ||
+                        (dist.city1 === cityCol.id && dist.city2 === cityRow.id)) {
+                        foundDistance = dist.distance / 10;
                         break;
                     }
                 }
@@ -73,6 +71,7 @@ function createTable() {
                     cell.textContent = foundDistance;
                 }
             }
+            
             tablediv.appendChild(cell);
         }
     }
@@ -82,9 +81,9 @@ createAllCityBoxes();
 createTable();
 
 let cityFound = null;
-for (let i = 0; i < cities.length; i++) {
-    if (cities[i].name === targetCityName) {
-        cityFound = cities[i];
+for (let city of cities) {
+    if (city.name === targetCityName) {
+        cityFound = city;
         break;
     }
 }
@@ -99,34 +98,34 @@ if (cityFound === null) {
     markCityBox("target", cityFound);
 
     let closestCity = null;
-    let shortestDistance = Infinity;
+    let shortestDistance = distances[0].distance; 
     let furthestCity = null;
-    let longestDistance = -Infinity;
+    let longestDistance = distances[0].distance;
 
-    for (let i = 0; i < distances.length; i++) {
-        if (distances[i].city1 === cityFound.id || distances[i].city2 === cityFound.id) {
+    for (let distance of distances) {
+        if (distance.city1 === cityFound.id || distance.city2 === cityFound.id) {
             let otherCityId;
-            if (distances[i].city1 === cityFound.id) {
-                otherCityId = distances[i].city2;
+            if (distance.city1 === cityFound.id) {
+                otherCityId = distance.city2;
             } else {
-                otherCityId = distances[i].city1;
+                otherCityId = distance.city1;
             }
 
             let otherCity = null;
-            for (let j = 0; j < cities.length; j++) {
-                if (cities[j].id === otherCityId) {
-                    otherCity = cities[j];
+            for (let city of cities) {
+                if (city.id === otherCityId) {
+                    otherCity = city;
                     break;
                 }
             }
 
-            if (distances[i].distance < shortestDistance) {
-                shortestDistance = distances[i].distance;
+            if (distance.distance < shortestDistance) {
+                shortestDistance = distance.distance;
                 closestCity = otherCity;
             }
 
-            if (distances[i].distance > longestDistance) {
-                longestDistance = distances[i].distance;
+            if (distance.distance > longestDistance) {
+                longestDistance = distance.distance;
                 furthestCity = otherCity;
             }
         }
@@ -137,5 +136,6 @@ if (cityFound === null) {
 
     h3.textContent = "Av städerna i databasen så ligger " + closestCity.name + " närmast och " + furthestCity.name + " längst bort.";
 }
+
 
 
